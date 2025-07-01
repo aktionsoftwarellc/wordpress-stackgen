@@ -120,9 +120,12 @@ services:
       WORDPRESS_NONCE_SALT: \${NONCE_SALT}
     volumes:
       - ./http:/var/www/html/wp-content
+    depends_on:
+      - db
   db:
     image: mysql:8.0
     restart: always
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_DATABASE: \${DB_NAME}
       MYSQL_USER: \${DB_USER}
