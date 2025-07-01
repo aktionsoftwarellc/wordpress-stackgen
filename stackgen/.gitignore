@@ -1,0 +1,22 @@
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# Stacks geradas
+stacks/
+
+# Arquivos de ambiente
+.env
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Outros
+*.swp 
