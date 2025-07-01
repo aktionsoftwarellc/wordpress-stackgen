@@ -171,7 +171,9 @@ app.post("/deploy", requireLogin, (req, res) => {
   });
 });
 
-const PORT = 3000;
-app.listen(PORT, () => {
-  console.log(`Stackgen rodando em http://localhost:${PORT}`);
+const PORT = process.env.PORT || 3000;
+const HOST_IP = process.env.HOST_IP || "0.0.0.0";
+
+app.listen(PORT, HOST_IP, () => {
+  console.log(`Stackgen rodando em http://${HOST_IP}:${PORT}`);
 });

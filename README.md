@@ -43,37 +43,77 @@ Exemplo de `config.json` preenchido:
 }
 ```
 
-### 4. Inicie o painel
+### 4. Configure o IP e porta de acesso (opcional)
 
-No terminal, execute:
+Para limitar o acesso a um IP específico (ex: VPN) ou alterar a porta, copie o arquivo de exemplo:
+```bash
+cp env.example .env
+```
+
+Edite o `.env` e configure conforme necessário:
+```bash
+HOST_IP=172.99.10.1  # IP da VPN
+PORT=3000            # Porta do servidor
+# ou HOST_IP=0.0.0.0 para permitir qualquer IP
+```
+
+### 5. Inicie o painel
+
+**Modo desenvolvimento:**
 ```bash
 npm start
 ```
-Acesse o painel via navegador em [http://localhost:3000](http://localhost:3000).
+
+**Modo produção (daemon/serviço):**
+```bash
+# Instale PM2 globalmente (se não tiver)
+npm install -g pm2
+
+# Inicie como serviço
+npm run daemon
+
+# Outros comandos úteis:
+npm run stop      # Para o serviço
+npm run restart   # Reinicia o serviço
+npm run logs      # Visualiza os logs
+```
+
+Acesse o painel via navegador:
+- IP específico: [http://172.99.10.1:3000](http://172.99.10.1:3000)
+- Localhost: [http://localhost:3000](http://localhost:3000)
 
 ---
 
 ## Como usar
 
-1. Acesse o painel via navegador (ex: http://localhost:3000)
+1. Acesse o painel via navegador
 2. Faça login com o usuário e senha definidos em `config.json`
-3. Preencha o formulário com os dados do novo site (domínio, banco, e-mail para SSL, etc)
-4. A stack será criada em `stackgen/stacks/NOME_DO_DOMINIO`
+3. Preencha o formulário:
+   - **Nome da Stack**: Nome da pasta que será criada (ex: "meusite")
+   - **Domínios**: Lista separada por vírgula (ex: "meusite.com,www.meusite.com")
+   - **Dados do banco**: usuário, senha, nome do banco
+   - **E-mail**: para certificados SSL automáticos
+4. A stack será criada em `stackgen/stacks/NOME_DA_STACK`
 5. Você pode:
    - Entrar na pasta criada e rodar manualmente: `docker-compose up -d`
    - Ou clicar no botão **Deploy** na tela de sucesso para executar o deploy direto pelo painel
 
 ## Recursos
 - Geração automática de `docker-compose.yml` e `.env` com variáveis para nginx-proxy e Let's Encrypt
+- Suporte a múltiplos domínios por stack (com e sem www)
+- Nome da stack independente dos domínios
 - Volumes separados para banco (`db/`) e temas/plugins (`http/`)
 - Upload de temas/plugins via SSH ou Git na pasta `http/`
 - Interface web responsiva (Bootstrap)
 - Deploy direto pelo painel (executa `docker-compose up -d` na pasta da stack)
+- Execução como daemon/serviço com PM2
+- Controle de acesso por IP específico
 
 ## Observações
-- O acesso ao WordPress será feito pelo domínio informado, via proxy reverso do nginx (não há portas públicas expostas)
+- O acesso ao WordPress será feito pelos domínios informados, via proxy reverso do nginx (não há portas públicas expostas)
+- MySQL configurado com `mysql_native_password` para compatibilidade com PHP mais antigo
 - Altere a senha padrão em `config.json` após o primeiro uso!
-- O painel exige Node.js e Docker instalados no servidor
+- O painel exige Node.js, Docker e PM2 (para modo daemon) instalados no servidor
 
 ---
 
