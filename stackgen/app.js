@@ -56,8 +56,10 @@ app.get("/", requireLogin, (req, res) => {
 });
 
 app.post("/criar", requireLogin, (req, res) => {
-  const { dominio, db_user, db_pass, db_name, db_prefix, email } = req.body;
-  const safeDominio = String(dominio).replace(/[^a-zA-Z0-9.-]/g, "");
+  const { nome_stack, dominios, db_user, db_pass, db_name, db_prefix, email } =
+    req.body;
+  const safeNomeStack = String(nome_stack).replace(/[^a-zA-Z0-9.-]/g, "");
+  const safeDominios = String(dominios).replace(/[^a-zA-Z0-9.,-]/g, "");
   const safeUser = String(db_user).replace(/[^a-zA-Z0-9_]/g, "");
   const safeDb = String(db_name).replace(/[^a-zA-Z0-9_]/g, "");
   const safePrefix = db_prefix
@@ -81,7 +83,7 @@ app.post("/criar", requireLogin, (req, res) => {
     "NONCE_SALT",
   ].forEach((k) => (salts[k] = gerarSalt()));
 
-  const stackDir = path.join(__dirname, "stacks", safeDominio);
+  const stackDir = path.join(__dirname, "stacks", safeNomeStack);
   if (!fs.existsSync(stackDir)) {
     fs.mkdirSync(stackDir, { recursive: true });
     fs.mkdirSync(path.join(stackDir, "db"), { recursive: true });
@@ -89,7 +91,7 @@ app.post("/criar", requireLogin, (req, res) => {
   }
 
   // .env
-  let env = `VIRTUAL_HOST=${safeDominio}\nLETSENCRYPT_HOST=${safeDominio}\nLETSENCRYPT_EMAIL=${safeEmail}\n`;
+  let env = `VIRTUAL_HOST=${safeDominios}\nLETSENCRYPT_HOST=${safeDominios}\nLETSENCRYPT_EMAIL=${safeEmail}\n`;
   env += `DB_USER=${safeUser}\nDB_PASS=${db_pass}\nDB_NAME=${safeDb}\nDB_PREFIX=${safePrefix}\n`;
   Object.entries(salts).forEach(([k, v]) => (env += `${k}=${v}\n`));
   fs.writeFileSync(path.join(stackDir, ".env"), env);
@@ -143,7 +145,7 @@ services:
   );
 
   res.render("success", {
-    pasta: `stacks/${safeDominio}`,
+    pasta: `stacks/${safeNomeStack}`,
     comando: "docker compose up -d",
   });
 });

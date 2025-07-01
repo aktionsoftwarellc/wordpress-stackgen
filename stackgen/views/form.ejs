@@ -24,14 +24,31 @@
               <% } %>
               <form method="post" action="/criar">
                 <div class="mb-3">
-                  <label class="form-label">Domínio</label>
+                  <label class="form-label">Nome da Stack</label>
                   <input
                     type="text"
                     class="form-control"
-                    name="dominio"
+                    name="nome_stack"
                     required
-                    placeholder="ex: meusite.com"
+                    placeholder="ex: meusite"
                   />
+                  <small class="form-text text-muted"
+                    >Nome da pasta que será criada</small
+                  >
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Domínios</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="dominios"
+                    required
+                    placeholder="ex: meusite.com,www.meusite.com"
+                  />
+                  <small class="form-text text-muted"
+                    >Separados por vírgula. Incluir com e sem www se
+                    necessário</small
+                  >
                 </div>
                 <div class="mb-3">
                   <label class="form-label">Usuário do banco</label>
